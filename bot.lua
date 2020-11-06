@@ -13,17 +13,19 @@ local function open_config(path)
     return lyaml.load(content)
 end
 
-local config = open_config('config.yaml')
-
-if not config then
-    print('Error: Can\'t open config file!')
-    os.exit()
+local function read_token(config)
+    if config then
+        return config['token']
+    else
+        return os.getenv('BOT_TOKEN')
+    end
 end
 
-local token = config['token']
+local config = open_config('config.yaml')
+local token = read_token(config)
 
 if not token then
-    print('Error: Can\'t find token in config file')
+    print('Error: Can\'t find token in config file or in BOT_TOKEN environment variable')
     os.exit()
 end
 
